@@ -1,0 +1,22 @@
+{
+  "expectations": [
+    {
+      "id": "21a7c3e0-cd13-44e3-8aa9-2556e9e19573",
+      "kwargs": {
+        "column": "has_mask",
+        "value_set": [
+          true
+        ]
+      },
+      "meta": {},
+      "severity": "critical",
+      "type": "expect_column_values_to_be_in_set"
+    }
+  ],
+  "id": "27a59579-b002-4177-bc4b-3c07c700fa28",
+  "meta": {
+    "great_expectations_version": "1.6.2"
+  },
+  "name": "suite_tmp2",
+  "notes": null
+}

@@ -1,0 +1,99 @@
+fluent_datasources:
+  kvasir_filesystem_source:
+    type: pandas
+    id: 6cb0dc63-08a6-480c-91b1-9404cc8329cd
+    assets:
+      images_index:
+        type: dataframe
+        id: 3bdca06d-3cbf-41d9-991f-5dc8c76477d0
+        batch_metadata: {}
+  tmp_ds:
+    type: pandas
+    id: b6de6db9-8e6b-44e5-9df9-b69a480e648d
+  tmp_ds2:
+    type: pandas
+    id: e8d32215-dae8-4738-bdb1-cb50377c51dc
+  tmp_ds3:
+    type: pandas
+    id: 5c096a4b-8789-44d3-9151-19811007349c
+    assets:
+      asset1:
+        type: dataframe
+        id: efbde425-277b-47da-bec5-24e252b9e115
+        batch_metadata: {}
+  tmp_ds4:
+    type: pandas
+    id: a4030d50-3d05-448f-8b3b-b77c6e66a3f8
+    assets:
+      asset1:
+        type: dataframe
+        id: 643c9ef0-392b-4812-922e-21ae075a4837
+        batch_metadata: {}
+  ds_tmp:
+    type: pandas
+    id: 94f4eefe-907d-48fb-80d6-67c0eb63fdc6
+    assets:
+      images_index:
+        type: dataframe
+        id: 40d1264b-b632-45d7-b03e-3f205b2308d4
+        batch_metadata: {}
+  ds_tmp2:
+    type: pandas
+    id: 2229f14a-c2d7-4365-b4a1-9fce2ed734d1
+    assets:
+      asset1:
+        type: dataframe
+        id: c697fadf-c2bb-401c-bf79-e21f7948c9f8
+        batch_metadata: {}
+  kvasir_pandas_source:
+    type: pandas
+    id: 3028c736-76fb-466e-bdc7-9dcaafad4501
+    assets:
+      images_index:
+        type: dataframe
+        id: b6680154-dd6c-4529-b5d8-7a67333b904f
+        batch_metadata: {}
+config_version: 4.0
+expectations_store_name: expectations_store
+validation_results_store_name: validation_results_store
+checkpoint_store_name: checkpoint_store
+plugins_directory:
+stores:
+  expectations_store:
+    class_name: ExpectationsStore
+    store_backend:
+      class_name: TupleFilesystemStoreBackend
+      base_directory: expectations/
+      root_directory: /home/socks/code/Portfolio/Kvasir-SEG/gx
+  validation_results_store:
+    class_name: ValidationResultsStore
+    store_backend:
+      class_name: TupleFilesystemStoreBackend
+      base_directory: uncommitted/validations/
+      root_directory: /home/socks/code/Portfolio/Kvasir-SEG/gx
+  validation_definition_store:
+    class_name: ValidationDefinitionStore
+    store_backend:
+      class_name: TupleFilesystemStoreBackend
+      base_directory: validation_definitions/
+      root_directory: /home/socks/code/Portfolio/Kvasir-SEG/gx
+  checkpoint_store:
+    class_name: CheckpointStore
+    store_backend:
+      class_name: TupleFilesystemStoreBackend
+      suppress_store_backend_id: true
+      base_directory: checkpoints/
+      root_directory: /home/socks/code/Portfolio/Kvasir-SEG/gx
+data_docs_sites:
+  local_site:
+    class_name: SiteBuilder
+    show_how_to_buttons: true
+    store_backend:
+      class_name: TupleFilesystemStoreBackend
+      base_directory: uncommitted/data_docs/local_site/
+      root_directory: /home/socks/code/Portfolio/Kvasir-SEG/gx
+    site_index_builder:
+      class_name: DefaultSiteIndexBuilder
+config_variables_file_path:
+analytics_enabled:
+data_context_id: 2e3a7989-0ec9-473f-bd20-e5ec7a9e30cb

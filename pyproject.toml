@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "kvasir-seg"
+version = "0.1.0"
+description = ""
+authors = ["Will <xenoproboscizoid@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.12,<3.13"
+pandas = "<2.2"
+great-expectations = "^1.6.2"
+pre-commit = "^4.3.0"
+dvc = "^3.63.0"
+wandb = "^0.22.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+line-length = 88
+# Match project Python target
+target-version = "py312"
+
+[tool.ruff.lint]
+# Enable import sorting (isort replacement)
+extend-select = ["I"]

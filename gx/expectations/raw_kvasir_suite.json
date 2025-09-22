@@ -1,0 +1,40 @@
+{
+  "expectations": [
+    {
+      "id": "c2e4f281-b64e-4f2a-a5d1-58f80d2f4e25",
+      "kwargs": {
+        "value": 1000
+      },
+      "meta": {},
+      "severity": "critical",
+      "type": "expect_table_row_count_to_equal"
+    },
+    {
+      "id": "f02aa7a0-a236-4c1a-af8f-1bfdcfa2d670",
+      "kwargs": {
+        "column": "has_mask",
+        "value_set": [
+          true
+        ]
+      },
+      "meta": {},
+      "severity": "critical",
+      "type": "expect_column_values_to_be_in_set"
+    },
+    {
+      "id": "5c1c304f-dde1-4165-82f9-9e58bb51ed8d",
+      "kwargs": {
+        "column": "image_id"
+      },
+      "meta": {},
+      "severity": "critical",
+      "type": "expect_column_values_to_be_unique"
+    }
+  ],
+  "id": "6d73d73e-abb1-487d-82b0-4a2cc1cdc0b3",
+  "meta": {
+    "great_expectations_version": "1.6.2"
+  },
+  "name": "raw_kvasir_suite",
+  "notes": null
+}
