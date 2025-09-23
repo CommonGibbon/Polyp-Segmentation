@@ -21,7 +21,10 @@ jobs:
           cache-dependency-path: 'poetry.lock'
 
       - name: Install Poetry
-        run: pipx install poetry
+        run: |
+          pipx install poetry
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+          poetry --version
 
 
 
