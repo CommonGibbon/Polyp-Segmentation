@@ -1,0 +1,11 @@
+# conf/config.yaml
+defaults:
+  - data: kvasir
+  - model: unet_resnet34
+  - train: default
+  - eval: default
+  - _self_
+
+hydra:
+  run:
+    dir: outputs/${now:%Y%m%d_%H%M%S}

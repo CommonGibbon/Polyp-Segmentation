@@ -11,7 +11,9 @@ pandas = "<2.2"
 great-expectations = "^1.6.2"
 pre-commit = "^4.3.0"
 dvc = "^3.63.0"
-wandb = "^0.22.0"
+mlflow = "^3.4.0"
+torch = "^2.8.0"
+torchvision = "^0.23.0"
 
 
 [build-system]

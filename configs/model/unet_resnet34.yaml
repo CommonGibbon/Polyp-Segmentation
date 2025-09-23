@@ -1,0 +1,6 @@
+# conf/model/unet_resnet34.yaml
+name: unet
+encoder_name: resnet34
+encoder_weights: imagenet
+in_channels: 3
+classes: 1

@@ -1,0 +1,9 @@
+# conf/data/kvasir.yaml
+root: data/kvasir
+splits_dir: ${data.root}/splits
+train_csv: ${data.splits_dir}/train.csv
+val_csv: ${data.splits_dir}/val.csv
+test_csv: ${data.splits_dir}/test.csv
+size: 256
+mean: [0.485, 0.456, 0.406]
+std:  [0.229, 0.224, 0.225]
