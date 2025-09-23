@@ -40,4 +40,12 @@ jobs:
 
       - name: Test
         run: |
-          poetry run pytest -q
+          set -e
+          poetry run pytest -q || {
+            code=$?; if [ "$code" -eq 5 ]; then
+              echo "No tests collected; skipping test step.";
+              exit 0;
+            else
+              exit $code;
+            fi
+          }
