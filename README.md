@@ -4,7 +4,7 @@
 
 [![CI](https://github.com/CommonGibbon/Polyp-Segmentation/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/CommonGibbon/Polyp-Segmentation/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-![Python](https://img.shields.io/badge/python-3.11+-blue)
+![Python](https://img.shields.io/badge/python-3.12+-blue)
 ![Status](https://img.shields.io/badge/status-alpha-yellow)
 
 Segment colorectal polyps in endoscopy images (binary mask) with a modern, reproducible MLOps stack: DVC for data/versioning, Great Expectations for data checks, Hydra configs, MLflow tracking/registry-ready, and containerized serving planned. Baseline model: U-Net (ResNet34 encoder), 256×256 input.
