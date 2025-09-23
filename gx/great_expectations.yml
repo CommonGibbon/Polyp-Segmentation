@@ -51,7 +51,7 @@ fluent_datasources:
     assets:
       images_index:
         type: dataframe
-        id: b6680154-dd6c-4529-b5d8-7a67333b904f
+        id: 3aa98ddc-fd1e-420a-ba29-eb9550827195
         batch_metadata: {}
 config_version: 4.0
 expectations_store_name: expectations_store

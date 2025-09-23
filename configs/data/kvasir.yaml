@@ -1,5 +1,5 @@
 # conf/data/kvasir.yaml
-root: data/kvasir
+root: data
 splits_dir: ${data.root}/splits
 train_csv: ${data.splits_dir}/train.csv
 val_csv: ${data.splits_dir}/val.csv

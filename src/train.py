@@ -45,15 +45,23 @@ class KvasirSegDataset(Dataset):
             [
                 A.HorizontalFlip(p=0.5),
                 A.VerticalFlip(p=0.2),
-                A.ShiftScaleRotate(
-                    shift_limit=0.05,
-                    scale_limit=0.1,
-                    rotate_limit=15,
-                    p=0.5,
+                A.Affine(
+                    translate_percent=0.05,  # ~ +/-5% shift in x and y
+                    scale=(0.9, 1.1),  # 1 +/- 0.1
+                    rotate=(-15, 15),  # +/- 15 degrees
+                    interpolation=cv2.INTER_LINEAR,
+                    mask_interpolation=cv2.INTER_NEAREST,
                     border_mode=cv2.BORDER_REFLECT_101,
+                    p=0.5,
                 ),
                 A.RandomBrightnessContrast(p=0.3),
-                A.ElasticTransform(alpha=50, sigma=7, alpha_affine=10, p=0.2),
+                A.ElasticTransform(
+                    alpha=50,
+                    sigma=7,
+                    interpolation=cv2.INTER_LINEAR,
+                    border_mode=cv2.BORDER_REFLECT_101,
+                    p=0.2,
+                ),
                 A.Resize(size, size),
                 A.Normalize(mean=mean, std=std),
                 ToTensorV2(),
@@ -73,8 +81,8 @@ class KvasirSegDataset(Dataset):
 
     def __getitem__(self, idx):
         row = self.df.iloc[idx]
-        img = cv2.imread(row.image, cv2.IMREAD_COLOR)[:, :, ::-1]
-        mask = cv2.imread(row.mask, cv2.IMREAD_GRAYSCALE)
+        img = cv2.imread(row["image"], cv2.IMREAD_COLOR)[:, :, ::-1]
+        mask = cv2.imread(row["mask"], cv2.IMREAD_GRAYSCALE)
         mask = (mask > 0).astype(np.float32)
         out = self.tf(image=img, mask=mask)
         x = out["image"]
@@ -122,7 +130,7 @@ def overlay_and_save(x, y, yhat, path, thr=0.5):
     cv2.imwrite(str(path), overlay)
 
 
-@hydra.main(version_base=None, config_path="../conf", config_name="defaults")
+@hydra.main(version_base=None, config_path="../configs", config_name="defaults")
 def main(cfg: DictConfig):
     print(OmegaConf.to_yaml(cfg))
     set_seed(cfg.train.seed)
