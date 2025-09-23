@@ -1,0 +1,9 @@
+stages:
+  splits:
+    cmd: python -m src.data.make_splits --root data/kvasir
+    deps:
+    - data/raw/Kvasir-SEG/images
+    - data/raw/Kvasir-SEG/masks
+    - src/data/make_splits.py
+    outs:
+    - data/kvasir/splits

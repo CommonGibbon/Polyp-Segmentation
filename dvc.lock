@@ -1,0 +1,25 @@
+schema: '2.0'
+stages:
+  splits:
+    cmd: python -m src.data.make_splits --root data/kvasir
+    deps:
+    - path: data/raw/Kvasir-SEG/images
+      hash: md5
+      md5: a913e1e11e6ce2f3c225cb374d0ddf97.dir
+      size: 39549897
+      nfiles: 1000
+    - path: data/raw/Kvasir-SEG/masks
+      hash: md5
+      md5: 500286541375921e91843712dd7ed8d7.dir
+      size: 12852360
+      nfiles: 1000
+    - path: src/data/make_splits.py
+      hash: md5
+      md5: 74a89d0b282299bf9ca7c67707c19b68
+      size: 1335
+    outs:
+    - path: data/kvasir/splits
+      hash: md5
+      md5: 56eefcf5fb803cef9dd6da11b49f0678.dir
+      size: 112
+      nfiles: 4
