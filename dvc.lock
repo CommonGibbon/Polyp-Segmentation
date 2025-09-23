@@ -1,7 +1,7 @@
 schema: '2.0'
 stages:
   splits:
-    cmd: python -m src.data.make_splits --root data/kvasir
+    cmd: poetry run python3 -m src.data.make_splits --root data
     deps:
     - path: data/raw/Kvasir-SEG/images
       hash: md5
@@ -15,11 +15,11 @@ stages:
       nfiles: 1000
     - path: src/data/make_splits.py
       hash: md5
-      md5: 74a89d0b282299bf9ca7c67707c19b68
-      size: 1335
+      md5: 2679fc407ee72921bf78c435ac852246
+      size: 1383
     outs:
-    - path: data/kvasir/splits
+    - path: data/splits
       hash: md5
-      md5: 56eefcf5fb803cef9dd6da11b49f0678.dir
-      size: 112
+      md5: 8c68bc803cdb921e2f4c54dd76058ea7.dir
+      size: 113118
       nfiles: 4

@@ -1,6 +1,6 @@
 stages:
   splits:
-    cmd: poetry run python3 -m src.data.make_splits --root data --force
+    cmd: poetry run python3 -m src.data.make_splits --root data
     deps:
     - data/raw/Kvasir-SEG/images
     - data/raw/Kvasir-SEG/masks
