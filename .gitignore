@@ -62,8 +62,9 @@ great_expectations/uncommitted/
 
 # DVC-managed data
 # DVC will auto-edit .gitignore when you `dvc add`. Keep these as safe defaults:
-data/**/*
+!data/**/*.dvc
 !data/**/.gitkeep
 # Keep small committed artifacts like splits/config/readme
 !data/**/splits/**
 !data/**/README.md
+data/splits
