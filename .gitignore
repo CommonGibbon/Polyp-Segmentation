@@ -60,11 +60,14 @@ great_expectations/uncommitted/
 .env
 .env.*
 
-# DVC-managed data
-# DVC will auto-edit .gitignore when you `dvc add`. Keep these as safe defaults:
+# DVC managed files
+data/splits
+
+# Allow smoke splits to be committed to Git
+!data/splits_smoke
+!data/splits_smoke/**
+
+# Keep other small artifacts
 !data/**/*.dvc
 !data/**/.gitkeep
-# Keep small committed artifacts like splits/config/readme
-!data/**/splits/**
 !data/**/README.md
-data/splits

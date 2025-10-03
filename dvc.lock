@@ -23,3 +23,24 @@ stages:
       md5: 8c68bc803cdb921e2f4c54dd76058ea7.dir
       size: 113118
       nfiles: 4
+  smoke_splits:
+    cmd: poetry run python3 -m src.data.make_smoke_splits --root data
+    deps:
+    - path: data/splits/train.csv
+      hash: md5
+      md5: 999d91b4254b67721c70feda66de854b
+      size: 79111
+    - path: data/splits/val.csv
+      hash: md5
+      md5: 1a6100b3977244c6f1dc3af2009ca011
+      size: 16961
+    - path: src/data/make_smoke_splits.py
+      hash: md5
+      md5: e7d9919fc5a6a837ddd483bcbef35ce8
+      size: 1424
+    outs:
+    - path: data/splits_smoke
+      hash: md5
+      md5: 6120937f76a3db568ae112e1f6b865b4.dir
+      size: 3528
+      nfiles: 3

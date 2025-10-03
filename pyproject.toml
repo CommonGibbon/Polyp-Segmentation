@@ -16,6 +16,7 @@ torchvision = "^0.23.0"
 albumentations = "^2.0.8"
 segmentation-models-pytorch = "^0.5.0"
 torchmetrics = "^1.8.2"
+dvc-s3 = "^3.2.2"
 
 
 [tool.poetry.group.dev.dependencies]

@@ -1,4 +1,6 @@
 [core]
-    remote = storage
+    remote = origin
 ['remote "storage"']
     url = /home/socks/data/kvasir-seg-data
+['remote "origin"']
+    url = s3://kvasir-seg-dataset-willshannon

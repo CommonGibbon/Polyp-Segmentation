@@ -7,3 +7,11 @@ stages:
     - src/data/make_splits.py
     outs:
     - data/splits
+  smoke_splits:
+    cmd: poetry run python3 -m src.data.make_smoke_splits --root data
+    deps:
+    - data/splits/train.csv
+    - data/splits/val.csv
+    - src/data/make_smoke_splits.py
+    outs:
+    - data/splits_smoke

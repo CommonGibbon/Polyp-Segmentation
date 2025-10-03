@@ -1,0 +1,8 @@
+{
+  "seed": "deterministic_first_n",
+  "counts": {
+    "train": 20,
+    "val": 10
+  },
+  "source_splits": "splits"
+}
