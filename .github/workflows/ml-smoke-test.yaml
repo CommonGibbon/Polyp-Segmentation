@@ -1,0 +1,100 @@
+name: Smoke Test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  smoke-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.12'
+
+    - name: Install Poetry
+      uses: snok/install-poetry@v1
+
+    - name: Install dependencies
+      run: poetry install
+
+    - name: Configure DVC for public bucket
+      run: |
+        dvc remote add -d origin s3://kvasir-seg-dataset-willshannon
+        dvc remote modify origin endpointurl https://s3.amazonaws.com
+        dvc remote modify origin ask_password false
+
+    - name: Pull smoke data
+      run: |
+        # Pull only files referenced in smoke splits
+        python -c "
+        import pandas as pd
+        import subprocess
+        import sys
+        from pathlib import Path
+
+        # Read smoke splits
+        train_df = pd.read_csv('data/splits_smoke/train.csv')
+        val_df = pd.read_csv('data/splits_smoke/val.csv')
+
+        # Get unique file paths
+        files = set(train_df['image'].tolist() + train_df['mask'].tolist() +
+                   val_df['image'].tolist() + val_df['mask'].tolist())
+
+        # Pull each file
+        for file in files:
+            if Path(file).exists():
+                continue
+            print(f'Pulling {file}')
+            result = subprocess.run(['dvc', 'pull', file], capture_output=True)
+            if result.returncode != 0:
+                print(f'Failed to pull {file}: {result.stderr.decode()}')
+                sys.exit(1)
+        "
+
+    - name: Run smoke training test
+      run: |
+        poetry run python -c "
+        import torch
+        import pandas as pd
+        import segmentation_models_pytorch as smp
+        from src.data.dataset import KvasirDataset
+
+        # Test data loading
+        train_df = pd.read_csv('data/splits_smoke/train.csv')
+        val_df = pd.read_csv('data/splits_smoke/val.csv')
+        print(f'✅ Data loaded: {len(train_df)} train, {len(val_df)} val')
+
+        # Test dataset creation
+        train_dataset = KvasirDataset(train_df)
+        val_dataset = KvasirDataset(val_df)
+        print(f'✅ Datasets created')
+
+        # Test model creation with minimal config
+        model = smp.Unet(
+            encoder_name='resnet34',
+            encoder_weights=None,  # No pretrained weights for speed
+            in_channels=3,
+            classes=1
+        )
+        print(f'✅ Model created')
+
+        # Test one forward pass
+        sample = train_dataset[0]
+        if isinstance(sample, tuple):
+            x, y = sample
+        else:
+            x = sample
+            y = None
+
+        with torch.no_grad():
+            output = model(x.unsqueeze(0))
+        print(f'✅ Forward pass successful, output shape: {output.shape}')
+
+        print('🎉 All smoke tests passed!')
+        "
