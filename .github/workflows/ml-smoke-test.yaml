@@ -25,9 +25,9 @@ jobs:
 
     - name: Configure DVC for public bucket
       run: |
-        dvc remote add -d origin s3://kvasir-seg-dataset-willshannon
-        dvc remote modify origin endpointurl https://s3.amazonaws.com
-        dvc remote modify origin ask_password false
+        poetry run dvc remote add -d origin s3://kvasir-seg-dataset-willshannon
+        poetry run dvc remote modify origin endpointurl https://s3.amazonaws.com
+        poetry run dvc remote modify origin ask_password false
 
     - name: Pull smoke data
       run: |
