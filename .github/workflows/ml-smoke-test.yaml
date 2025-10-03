@@ -51,7 +51,7 @@ jobs:
             if Path(file).exists():
                 continue
             print(f'Pulling {file}')
-            result = subprocess.run(['dvc', 'pull', file], capture_output=True)
+            result = subprocess.run(['poetry', 'run', 'dvc', 'pull', file], capture_output=True)
             if result.returncode != 0:
                 print(f'Failed to pull {file}: {result.stderr.decode()}')
                 sys.exit(1)
