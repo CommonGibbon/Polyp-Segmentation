@@ -9,3 +9,6 @@ defaults:
 hydra:
   run:
     dir: outputs/${now:%Y%m%d_%H%M%S}
+
+experiment:
+  name: "polyp-seg"

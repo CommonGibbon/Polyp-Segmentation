@@ -18,6 +18,7 @@ from torchmetrics.classification import BinaryF1Score, BinaryJaccardIndex
 
 
 def set_seed(seed: int):
+    """Set random seed for reproducibility."""
     import random
 
     import numpy as np
@@ -30,6 +31,8 @@ def set_seed(seed: int):
 
 
 class KvasirSegDataset(Dataset):
+    """Kvasir-SEG dataset tells us how to load images and masks + apply augmentations."""
+
     def __init__(
         self,
         csv_path,
@@ -84,13 +87,14 @@ class KvasirSegDataset(Dataset):
         img = cv2.imread(row["image"], cv2.IMREAD_COLOR)[:, :, ::-1]
         mask = cv2.imread(row["mask"], cv2.IMREAD_GRAYSCALE)
         mask = (mask > 0).astype(np.float32)
-        out = self.tf(image=img, mask=mask)
+        out = self.tf(image=img, mask=mask)  # Apply transforms to the image and mask
         x = out["image"]
         y = out["mask"].unsqueeze(0)  # (1,H,W)
         return x, y
 
 
 def dice_loss_logits(logits, targets, eps=1e-6):
+    """This is the soft dice loss function we'll use for training."""
     probs = torch.sigmoid(logits)
     num = 2 * (probs * targets).sum(dim=(2, 3))
     den = (probs.pow(2) + targets.pow(2)).sum(dim=(2, 3)) + eps
@@ -98,6 +102,7 @@ def dice_loss_logits(logits, targets, eps=1e-6):
 
 
 def get_git_sha():
+    """We'll log the git sha of the current commit as part of our MLflow experiment tracking."""
     try:
         return subprocess.check_output(
             ["git", "rev-parse", "--short", "HEAD"],
@@ -114,6 +119,7 @@ def get_git_sha():
 
 
 def overlay_and_save(x, y, yhat, path, thr=0.5):
+    """Used for saving sample overlays images after training"""
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     x_np = (x.permute(1, 2, 0).cpu().numpy() * 255).clip(0, 255).astype(np.uint8)
@@ -183,9 +189,11 @@ def main(cfg: DictConfig):
     dice_metric = BinaryF1Score(threshold=0.5).to(device)  # Dice == F1 for binary masks
     iou_metric = BinaryJaccardIndex(threshold=0.5).to(device)
 
-    exp_name = "polyp-seg"
-    mlflow.set_experiment(exp_name)
+    mlflow.set_experiment(cfg.experiment.name)
     with mlflow.start_run():  # as run:
+        mlflow.log_artifact(
+            "dvc.lock"
+        )  # track the dvc.lock as an experiment artifact so we can tell what data was used
         mlflow.log_params(
             {
                 "encoder": cfg.model.encoder_name,
@@ -211,7 +219,7 @@ def main(cfg: DictConfig):
         use_amp = device.type == "cuda" and cfg.train.amp
         for epoch in range(cfg.train.epochs):
             model.train()  # training mode - dropout is on, batchnorm uses batch stats, and ops are recorded for backprop
-            tr_loss = 0.0
+            tr_loss, tr_loss_bce, tr_loss_dice = 0.0, 0.0, 0.0
             for i, (x, y) in enumerate(train_dl):  # for each batch
                 x, y = (
                     x.to(device, non_blocking=True),
@@ -222,18 +230,33 @@ def main(cfg: DictConfig):
                     device_type="cuda", dtype=torch.bfloat16, enabled=use_amp
                 ):  # use lower precision for forward pass if using GPU and amp is enabled
                     logits = model(x)
-                    loss = 0.5 * bce(logits, y) + 0.5 * dice_loss_logits(logits, y)
+                    bce_loss = bce(logits, y)
+                    dice_loss = dice_loss_logits(logits, y)
+                    loss = 0.5 * bce_loss + 0.5 * dice_loss
                 loss.backward()
                 # Optional: gradient clipping here if you use it
                 # torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm)
                 opt.step()
 
                 tr_loss += loss.item()
+                tr_loss_bce += bce_loss.item()
+                tr_loss_dice += dice_loss.item()
                 if (i + 1) % cfg.train.log_every_n_steps == 0:
+                    step = epoch * len(train_dl) + i + 1
                     mlflow.log_metric(
-                        "train_loss",
+                        "train_loss_total",
                         tr_loss / (i + 1),
-                        step=epoch * len(train_dl) + i + 1,
+                        step=step,
+                    )
+                    mlflow.log_metric(
+                        "train_loss_bce",
+                        tr_loss_bce / (i + 1),
+                        step=step,
+                    )
+                    mlflow.log_metric(
+                        "train_loss_dice",
+                        tr_loss_dice / (i + 1),
+                        step=step,
                     )
 
             # Validation
