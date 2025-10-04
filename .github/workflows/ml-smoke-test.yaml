@@ -59,14 +59,12 @@ jobs:
         "
 
     - name: Run smoke training test
-      env:
-        PYTHONPATH: .
       run: |
         poetry run python -c "
         import torch
         import pandas as pd
         import segmentation_models_pytorch as smp
-        from src.data.dataset import KvasirDataset
+        from data.dataset import KvasirDataset
 
         # Test data loading
         train_df = pd.read_csv('data/splits_smoke/train.csv')
