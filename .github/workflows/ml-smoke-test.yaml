@@ -27,7 +27,7 @@ jobs:
       run: |
         poetry run dvc remote modify origin url s3://kvasir-seg-dataset-willshannon
         poetry run dvc remote modify origin endpointurl https://s3.amazonaws.com
-        poetry run dvc remote modify origin no_sign_request true
+        poetry run dvc remote modify origin allow_anonymous_login true
 
     - name: Pull smoke data
       run: |
