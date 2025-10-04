@@ -32,7 +32,7 @@ jobs:
     - name: Pull smoke data
       run: |
         # Pull only files referenced in smoke splits
-        python -c "
+        poetry run python -c "
         import pandas as pd
         import subprocess
         import sys
